@@ -1,0 +1,9 @@
+1 CURSOR cursors\cross.cur
+2 CURSOR cursors\fed.cur
+3 CURSOR cursors\kli.cur
+4 CURSOR cursors\loc.cur
+5 CURSOR cursors\map.cur
+6 CURSOR cursors\ori.cur
+7 CURSOR cursors\rom.cur
+8 CURSOR cursors\trek.cur
+9 CURSOR cursors\warn.cur

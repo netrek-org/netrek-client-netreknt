@@ -1,0 +1,176 @@
+/************************************************
+See the Changes file within the doc directory for changes made to
+previous version of COW, which this code is based from.
+************************************************/
+
+7-Feb-98 - Was able to figure out how to compile libgmp on Win32 using
+           Visual C++ 5.0.  I had to cheat, and renamed the pow() function
+           to mpow().  It seems to still work.
+8-Feb-98 - Was able to get a working client built
+11-Feb-98 - Rearranged files into some semblance of a directory structure.
+
+  net2k/config - files relating to previous COW configuration
+  net2k/doc - Documentation directory
+  net2k/fonts - Netrek fonts that were created previously
+  net2k/include - All include header files
+  net2k/othersrc - Some other source that was in the COW directory that
+                   isn't used in Win32.
+  net2k/rsa - RSA code, will be available in seperate encrypted archive
+  net2k/src - All source code
+  net2k/win32 - Win32 configuration and header files
+  Makefile - Main makefile
+  system.mk - Personalized configuration settings(RSA, CWHO, etc)
+  
+
+ To compile:
+  If using RSA, extract the rsa directory, put your keyfiles into
+net2k/rsa/key.
+  
+  Edit system.mk
+    - Enter your email address
+    - define RSA if required
+    - Define RSAKEYfile if using RSA
+  
+  Build the RSA sources
+    - From the ./net2k directory, do a 'nmake rsa'
+  
+  Build the client sources
+    - From the ./net2k directory, do a 'nmake client'
+
+
+Further documentation on the Software will be forthcoming.
+
+12-Feb-98 - Built source code distribution
+
+23-Feb-98 - Finally got back to this client
+	Today I started taking SWINE improvements into the code
+
+	- Copied stats.c from SWINE distribution, modified slightly
+	  This provides a smaller, more colorful stats window
+	- Modified getname.c from Greg Chungs work in SWINE distribution
+	  This provides a psuedo text window to enter name and password
+	  indicates to user length of field, and current cursor location.
+	- Set GALAXY ship stats to same as in getship.c of Vanilla server
+
+11-Apr-98 - Finally got back to the client
+	Today I started fixing some bugs
+	
+	- Added whymsgdead bugfix from COW3
+	- Added Key mapping to Numeric Keypad keys
+	- Was able to get a 256 color SB explosion to work
+	- Will work on replacing all XBM style bitmaps, with windows
+	  style .bmp contained within resource DLLs
+
+13-Apr-98
+	- Worked on way to display monochrome or color bitmaps
+	- Implemented color shit bitmaps
+
+14-Apr-98
+ 	- Worked on my income taxes :)
+ 	- Converted torp and plasma bitmaps from xpm to bmp
+ 	- Going to have to redo the torp firing routines to handle
+ 	  more than one bitmap cycled
+	- Still have many more bitmaps to convert
+
+
+28-Jun-98
+	- I didn't talk about what I did last time :)
+	- New explosion bitmaps using a program called mkexpl I found on the
+	  net!
+	- Completed conversion of torp/plasma bitmaps and explosions.
+	- New planet bitmaps, right now just for owner properties, doesn't
+	  show resources with them.  These are just temporary experimental.
+	- Spent a great deal of time trying to figure out a method for
+	  drawing bitmaps transparently so that ships/torpedoes would show
+	  up on top of planets, but didn't get far.
+
+28-Oct-98
+	- Removed netstats code
+	- Remove lagmeter code
+	- generated Xref from the COW sources
+
+29-Oct-98
+	- Removed censor code
+	- Modified copyright.h.  I don't see the point in maintaining two
+          copyright header files since they all say similar things and I
+          think by now all parts of the code has been modified by somebody.
+          Would like to include a fuller list of all involved.  Will
+          investigate.
+	
+17-Dec-98
+        - Began work on monochrome bitmap libraries
+        - Created bitmaps.h header file
+        - Standardized bitmap defines
+
+18-Dec-98
+        - Took cursors and created another resource DLL
+        - Created cursors.h header file
+
+19-Dec-98
+        - Created bitmap library for planets, using rabbitear bitmaps
+          will need to create additional library for moo and normal
+
+20-Dec-98
+        - Finished moving all bitmaps into resource DLLs
+        - Fixed ContinuousMouse so it's not always enabled.
+          However the feature packets still do not function properly
+          for ContinuousMouse.  I think this is flawed.
+
+22-Dec-98
+        - Worked on creating a default xtrekrc file with windows mappings
+          set to work well on a 1024x768 display
+          Need to work on placement of additional windows just in case they
+          are mapped by user.  Helpwin, motd, etc.
+
+11-Jan-99
+        - I've actually been working on this off and on the last two weeks,
+          just haven't updated this file.
+        - Ship bitmaps now have 32 images instead of 16!
+        - Made some changes to allow two builds of the client, one using
+          monochromatic bitmaps(16 color screen essentially), and the
+          other using colorized bitmaps(256 color screen).
+        - Reduced color depth of explosion bitmaps to 16 from 256, to
+          accomodate building a 256 color palette.  
+        - GOT FEATURE PACKETS WORKING!
+          Well actually I found out they did work, it's just that the
+          Continuous mouse code was being ignored.
+
+12-Jan-99
+        - Changed both mono and colorized bitmaps to 32 images instead of 16!
+        - In order to accomodate above change had to change ship explosion
+          to 66x66 bitmap instead of 64x64.
+          Starbase explosion changed to 180x180 instead of 80x80 to
+          accomodate super cool colorful SB explosion.
+        - These changes allowed me to build one client that would work
+          in either monochromatic or colorized mode.
+          New default key created 'colorClient: on'
+
+13-Jan-99
+        - Fixed bug in the COW code where if phaser statistics were
+          on, and you had 100% phaser hit rate, the message would be
+          truncated.
+        - RELEASED VERSION
+          This released version is essentially a bug fixed version of COW
+          for Windows with some features removed, and some new features
+          added.
+          My intent was to release a stable, bug-free version with some
+          signifigant new features.
+          
+          Signifigant feature list:
+          - Multi-color Ship bitmaps.  Including GA, and ATT ships, although
+            I haven't tested the ATT.
+          - 32 rotational images for ship bitmaps
+          - Multi-color spectacular explosions
+          - Bitmaps are created within resource DLLs allowing for
+            easy replacement in a pre-existing client.
+          - As a result of the resource DLLs only one planet bitmap
+            style(Rabbit ear) is included at this time.  I will create DLLs
+            for the other two styles(Moo and original) shortly.
+          - A very simple default xtrekrc is included, it is not complete
+            or inclusive.  This will be addressed shortly as well.
+          - New default keyword 'colorClient: on'.  This is on by default,
+            but setting this to off will set client to use the old-style
+            monochromatic bitmaps.  This may be necessary on some systems
+            which do not work right with color bitmaps.
+          - No documentation yet, available shortly.
+

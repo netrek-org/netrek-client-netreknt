@@ -1,0 +1,65 @@
+----
+
+Redo the player list.
+At the very least, place seperator between teams.
+Could possibly divide it into two columns, one for each team.
+Somehow need a full player list on a 1024x768 screen
+Would also be nice to be able to do 'I' type information from it
+
+----
+
+Metaserver.
+Create fallback metaserver lists.
+Perhaps method to utilize HTTP requests for server names.
+
+----
+
+Bitmaps
+Compile bitmaps into resource DLL's.  (done)
+This should allow a way to easily utilize 256 color bitmaps
+
+Should also look into color palettes.  One of the problems is having
+multiple copies of Netrek open using color bitmaps.
+
+----
+
+DirectX
+Look into conversion of display routines.  This should help eliminate
+flicker and such.
+
+----
+
+Documentation
+- Coding standards
+- Document program interfaces, such as network interfaces
+- Document method for creating resource DLLs
+
+----
+
+Code
+- Format code using standard naming conventions
+- Clean up code which is no longer utilized, experimental etc.
+- Create methodology for debug code
+- Prototype the source code, put function definitions in header file
+- Clean up defaults code, check for non-existing features and/or
+  redundancy.
+  
+----
+
+Client Configuration
+- Need better documentation
+- Need a program to configure client settings
+- Work on default windows arrangement for 1024x768 display
+
+----
+
+Redirect message types
+- Basic idea is to identify the different types of messages and then
+establish a mapping as to which windows they should appear in
+
+----
+
+Sounds
+- Work on sound configuration.  Put Wav files into resource DLL?  Allowing
+for easy customization.
+

@@ -1,0 +1,80 @@
+What means a++ ?
+b 
+
+How many armies can a Starbase carry?
+25 
+
+Which ship can carry 3 armies per kill?
+as 
+
+The most important planets have:
+a 
+
+You can yank another ship off of a planet using your:
+b 
+
+The message "OGG BASE!!", that means that your teammates want you to:
+a 
+
+You can find out which players are in assault ships by looking at:
+c 
+
+How many core planets does each team start with?
+5 
+
+To protect your starbase, the best place to be is:
+a 
+
+How many armies can be carried by a destroyer with three kills?
+5 
+
+How do you stop a cloaked enemy from taking a planet he's orbiting?
+a 
+
+What is the most accurate way to find a cloaked enemy?
+c 
+
+An assault ship can bomb at most how many armies at once?
+4 
+
+How many points of damage can a cruiser's plasma torpedo do?
+c 
+
+How many total points of damage can a starbase take before exploding?
+c 
+
+A scout's torpedoes move at warp:
+16 
+
+A cruiser's torpedoes move at warp:
+12 
+
+To verify, send the word 'doorstop' to yourself.
+doorstop
+
+To verify, send the word 'bronco' to yourself.
+bronco
+
+To verify, send the word 'plague' to yourself.
+plague
+
+To verify, send the word 'moo' to yourself.
+moo
+
+To verify, send the word 'transwarp' to yourself.
+transwarp
+
+To verify, send the word 'guzzler' to yourself.
+guzzler
+
+To verify, send the word 'calvin' to yourself.
+calvin
+
+To verify, send the word 'base' to yourself.
+base
+
+To verify, send the word 'iggy' to yourself.
+iggy
+
+To verify, send the word 'lock' to yourself.
+lock

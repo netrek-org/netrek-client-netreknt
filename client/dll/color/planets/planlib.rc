@@ -1,0 +1,12 @@
+1 BITMAP pixmaps\Fed_planet.bmp
+2 BITMAP pixmaps\Ori_planet.bmp
+3 BITMAP pixmaps\Kli_planet.bmp
+4 BITMAP pixmaps\Rom_planet.bmp
+5 BITMAP pixmaps\Ind_planet.bmp
+6 BITMAP pixmaps\Unkn_planet.bmp
+7 BITMAP pixmaps\Fed_mplanet.bmp
+8 BITMAP pixmaps\Ori_mplanet.bmp
+9 BITMAP pixmaps\Kli_mplanet.bmp
+10 BITMAP pixmaps\Rom_mplanet.bmp
+11 BITMAP pixmaps\Ind_mplanet.bmp
+12 BITMAP pixmaps\Unkn_mplanet.bmp

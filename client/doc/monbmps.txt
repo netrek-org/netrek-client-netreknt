@@ -1,0 +1,62 @@
+Monochrome bitmaps converted:
+
+ Ships
+ -----
+ Fed  SC, DD, CA, AS, BB, GA, SB, AT
+ Ori  SC, DD, CA, AS, BB, GA, SB, AT
+ Kli  SC, DD, CA, AS, BB, GA, SB, AT
+ Rom  SC, DD, CA, AS, BB, GA, SB, AT
+ Ind  SC, DD, CA, AS, BB, GA, SB, AT
+ 
+ Have not implemented ATT ship
+
+ Ship width = 20
+ Ship height = 20
+ 
+ Currently using 16 bmp rotation
+ Should switch to 32 bmp rotation
+ 
+ Weapons
+ -------
+Monochrome weapons will be old style.  No special bitmaps, instead simple
+drawing pixels.
+ 
+ Explosions
+ ----------
+ sbexplosion
+   Races = No
+   Images = 7
+   Width = 80
+   Height = 80
+
+ Explosion 
+   Races = No
+   Images = 5
+   Width = 64
+   Height = 64
+ 
+ torp_det    
+   Races = No 
+   Images = 5
+   Width = 8
+   Height = 8
+   
+ plasma_det  
+   Races = No 
+   Images = 5
+   Width = 13
+   Height = 13
+ 
+
+ 
+ Misc
+ ----
+ Greet  Kathy Ireland for ghostbust
+ Genocide Pic to display when game is done
+ cloak  Pic to display when ship is cloaking (8 bitmaps)
+ 
+ Planets
+ -------
+ Need bitmaps, the ones we have are limited!  ARRGH!
+
+ 

@@ -1,0 +1,47 @@
+Bitmaps converted:
+
+ Ships
+ -----
+ Fed  SC, DD, CA, AS, BB, GA, SB, AT
+ Ori  SC, DD, CA, AS, BB, GA, SB, AT
+ Kli  SC, DD, CA, AS, BB, GA, SB, AT
+ Rom  SC, DD, CA, AS, BB, GA, SB, AT
+ Ind  SC, DD, CA,     BB, GA,     AT
+ 
+ Missing Ind AS and SB.
+ Have no implemented ATT ship
+ 
+ Currently using 16 bmp rotation
+ Should switch to 32 bmp rotation
+ 
+ Weapons
+ -------
+ Fed  torp, plasma
+ Ori  torp, plasma
+ Kli  torp, plasma
+ Rom  torp, plasma
+ Ind  torp, plasma
+ 
+ torp has 8 images
+ plasma has 8 images
+ 
+ Explosions
+ ----------
+ sbexplosion  7 images  (same for all races)
+ Explosion    5 images  (same for all races)
+ torp_det     5 images  Fed, Ori, Kli, Rom, Ind
+ plasma_det   5 images  Fed, Ori, Kli, Rom, Ind
+ 
+ sbexplosion implemented temporarily
+ others not implmented yet
+ 
+ Misc
+ ----
+ Greet  Kathy Ireland for ghostbust
+ Genocide Pic to display when game is done
+ cloak  Pic to display when ship is cloaking (8 bitmaps)
+ 
+ Planets
+ -------
+ Need bitmaps, the ones we have are limited!  ARRGH!
+ 

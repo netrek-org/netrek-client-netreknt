@@ -1,0 +1,32 @@
+
+  WinActivate("Paint Shop Pro")
+  Sendkey("!fo")
+  Sendkey("C:\temp\bitmaps\ships\")
+  Sendkey(param1)
+  Sendkey("_")
+  Sendkey(param2)
+  Sendkey("1.bmp")
+  SendKey("{ENTER}")
+  TimeDelay(2)
+  
+for i = 1 to 31
+
+  SendKey("^a")
+  SendKey("^r")
+  SendKey("!f")
+  decimals(2)
+  Sendkey(i*11.25)
+  Sendkey("{ENTER}")
+  TimeDelay(2)
+  SendKey("!fa")
+  Sendkey("C:\temp\bitmaps\ships\")
+  Sendkey(param1)
+  Sendkey("_")
+  Sendkey(param2)
+  Sendkey(i+1)
+  Sendkey(".bmp")
+  Sendkey("{ENTER}")
+  TimeDelay(2)
+  Sendkey('^z')
+
+next

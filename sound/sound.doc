@@ -1,0 +1,46 @@
+This directory contains all the necessary files to add sound to COW.
+
+This tar file consists of this DOC file, a soundplayer and a sounds
+dir containing the sounds used. All precompiled COW clients have
+already sound support included.
+ 
+So just move or copy the sounds directory to an appropriate place,
+and then add a line to your .xtrekrc to tell netrek where to find the
+sounds like this:
+sounddir:	/usr/local/netrek/sounds
+#sound:		on/off 		Initialy turns sound on or off.
+#soundplayer:	bgsndplay	Name of the background sound player.
+
+It can go anywhere in the .xtrekrc. If you don't have or use an xtrekrc,
+then use an environment variable called SOUNDDIR to tell netrek where it
+is, otherwise it tries to find the sounds in the ./sounds dir. 
+
+Additionally you have to put the "bgsndplay" program anywhere to a directory
+included in your path.
+
+Also, if you have any better sounds for the sounds it makes, simply change
+the links in the sound directory to new sounds. 
+
+NOTE for SGI users:
+ The SGI bgsndplay program requires aiff files instead of the sun .au files.
+ You may convert the included sounds with the command:
+	
+	sfconvert infile.au outfile.aiff format aiff int 8 2 chan 1
+or for the raw files:
+	sfconvert infile.au outfile.aiff -i channels 1 rate 8000 mulaw end format aiff int 8 2
+
+Once the game is running, use the ~ key (which can be remapped of course),
+to bring up the sound menu. This enables you to turn individual sounds 
+on/off, and to turn ALL sounds on/off. 
+
+For informations on non sound related features we refer to the documentation
+of the COW client.
+
+Special thanks to Neil Cook for the initial sources of his sound client.
+
+Bugs, comments etc all to brmbugs@crown.EECS.Berkeley.EDU
+
+Happy Dooshing!
+
+Kurt (007)
+

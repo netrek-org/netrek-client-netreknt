@@ -1,0 +1,143 @@
+struct shm_sound           : audio.h 
+profanity                  : censor.c 
+struct stringlist          : defaults.c 
+struct def                 : defwin.c 
+struct feature             : feature.c 
+MPTYPE                     : mkkey.c 
+key_handler_type           : newinput.c 
+struct list                : newwin.c 
+struct option              : option.c 
+struct option_menu         : option.c 
+struct int_range           : option.c 
+struct war_cpacket         : packets.h 
+struct warning_s_spacket   : packets.h 
+struct updates_cpacket     : packets.h 
+struct you_spacket         : packets.h 
+struct warning_spacket     : packets.h 
+struct udp_req_cpacket     : packets.h 
+struct udp_reply_spacket   : packets.h 
+struct tractor_cpacket     : packets.h 
+struct youshort_spacket    : packets.h 
+struct torp_spacket        : packets.h 
+struct torp_s_spacket      : packets.h 
+struct torp_info_spacket   : packets.h 
+struct torp_cpacket        : packets.h 
+struct threshold_cpacket   : packets.h 
+struct status_spacket      : packets.h 
+struct stats_spacket       : packets.h 
+struct stats_s_spacket     : packets.h 
+struct speed_cpacket       : packets.h 
+struct socket_cpacket      : packets.h 
+struct shortreq_cpacket    : packets.h 
+struct shortreply_spacket  : packets.h 
+struct badversion_spacket  : packets.h 
+struct beam_cpacket        : packets.h 
+struct bomb_cpacket        : packets.h 
+struct bye_cpacket         : packets.h 
+struct cloak_cpacket       : packets.h 
+struct copilot_cpacket     : packets.h 
+struct coup_cpacket        : packets.h 
+struct det_mytorp_cpacket  : packets.h 
+struct det_torps_cpacket   : packets.h 
+struct dir_cpacket         : packets.h 
+struct youss_spacket       : packets.h 
+struct ship_cap_spacket    : packets.h 
+struct shield_cpacket      : packets.h 
+struct dockperm_cpacket    : packets.h 
+struct feature_cpacket     : packets.h 
+struct flags_spacket       : packets.h 
+struct hostile_spacket     : packets.h 
+struct sequence_spacket    : packets.h 
+struct kills_s_spacket     : packets.h 
+struct kills_spacket       : packets.h 
+struct login_cpacket       : packets.h 
+struct login_spacket       : packets.h 
+struct sequence_cpacket    : packets.h 
+struct mask_spacket        : packets.h 
+struct sc_sequence_spacket : packets.h 
+struct rsa_key_spacket     : packets.h 
+struct mesg_cpacket        : packets.h 
+struct mesg_s_cpacket      : packets.h 
+struct mesg_s_spacket      : packets.h 
+struct mesg_spacket        : packets.h 
+struct rsa_key_cpacket     : packets.h 
+struct motd_spacket        : packets.h 
+struct resetstats_cpacket  : packets.h 
+struct options_cpacket     : packets.h 
+struct orbit_cpacket       : packets.h 
+struct outfit_cpacket      : packets.h 
+struct packet_handler      : packets.h 
+struct reserved_spacket    : packets.h 
+struct phaser_cpacket      : packets.h 
+struct phaser_s_spacket    : packets.h 
+struct phaser_spacket      : packets.h 
+struct pickok_spacket      : packets.h 
+struct ping_cpacket        : packets.h 
+struct ping_spacket        : packets.h 
+struct reserved_cpacket    : packets.h 
+struct planet_loc_spacket  : packets.h 
+struct planet_s_spacket    : packets.h 
+struct planet_spacket      : packets.h 
+struct planlock_cpacket    : packets.h 
+struct plasma_cpacket      : packets.h 
+struct plasma_info_spacket : packets.h 
+struct plasma_spacket      : packets.h 
+struct repress_cpacket     : packets.h 
+struct repair_cpacket      : packets.h 
+struct player_s2_spacket   : packets.h 
+struct player_s_spacket    : packets.h 
+struct player_spacket      : packets.h 
+struct playlock_cpacket    : packets.h 
+struct refit_cpacket       : packets.h 
+struct plyr_info_spacket   : packets.h 
+struct plyr_login_spacket  : packets.h 
+struct practr_cpacket      : packets.h 
+struct pstatus_spacket     : packets.h 
+struct queue_spacket       : packets.h 
+struct quit_cpacket        : packets.h 
+struct servers             : parsemeta.c 
+enum statusTypes           : parsemeta.c 
+struct Sound               : sound.h 
+SLIDER                     : stats.c 
+RECORD                     : stats.c 
+struct phaser              : struct.h 
+struct obtype              : struct.h 
+struct rsa_key             : struct.h 
+struct message             : struct.h 
+struct memory              : struct.h 
+struct s_line              : struct.h 
+struct mctl                : struct.h 
+struct macro_list          : struct.h 
+struct planet              : struct.h 
+struct player              : struct.h 
+struct ship                : struct.h 
+struct distress_list       : struct.h 
+struct shipdef             : struct.h 
+struct distress            : struct.h 
+struct plasmatorp          : struct.h 
+DISTRESS_DESC              : struct.h 
+enum dist_type             : struct.h 
+struct torp                : struct.h 
+struct statentry           : struct.h 
+struct stats               : struct.h 
+struct key_list            : struct.h 
+struct plupdate            : struct.h 
+struct status              : struct.h 
+struct rank                : struct.h 
+struct dmacro_list         : struct.h 
+uid_t                      : vmsutils.h 
+fd_set                     : vmsutils.h 
+W_Callback                 : Wlib.h 
+W_Icon                     : Wlib.h 
+W_Font                     : Wlib.h 
+W_Event                    : Wlib.h 
+W_Color                    : Wlib.h 
+W_Window                   : Wlib.h 
+struct scrollingWindow     : x11window.c 
+struct icon                : x11window.c 
+struct fontInfo            : x11window.c 
+struct colors              : x11window.c 
+struct stringList          : x11window.c 
+struct window              : x11window.c 
+struct windowlist          : x11window.c 
+struct menuItem            : x11window.c 
