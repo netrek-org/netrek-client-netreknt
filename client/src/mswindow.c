@@ -682,7 +682,8 @@ Window *newWindow(char *name, int x, int y, int width, int height,
         sprintf (title_buff, "Netrek  @  %s", serverName);
         }
 // SRS /4/4/98      SpecialStyle = WS_OVERLAPPEDWINDOW;    //Make main window sizeable
-      SpecialStyle |=WS_BORDER;
+      // These options give a window with a title bar, along with ability to minimize
+      SpecialStyle |= WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
       }
    else if (strcmp (name, "wait") == 0)
       {
