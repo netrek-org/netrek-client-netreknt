@@ -88,19 +88,11 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 libcmt.lib user32.lib gdi32.lib wsock32.lib kernel32.lib winmm.lib mpr.lib libmp.lib libgmp.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib /out:"Debug/netrek.exe" /pdbtype:sept /libpath:"win32/lib"
-# Begin Custom Build
-WkspDir=.
-InputPath=.\Debug\netrek.exe
-SOURCE="$(InputPath)"
-
-"$(WkspDir)dummy" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	
-# End Custom Build
 # Begin Special Build Tool
 OutDir=.\Debug
 TargetPath=.\Debug\netrek.exe
 SOURCE="$(InputPath)"
-PostBuild_Cmds=stampver -vsrc\stampver.inf -i4 -j4 $(TargetPath) 	copy fonts\ntfonts2.fon $(OutDir)\ntfonts2.fon 	copy doc\xtrekrc $(OutDir) 
+PostBuild_Cmds=stampver -vsrc\stampver.inf -i4 -j4 $(TargetPath) 	copy fonts\ntfonts2.fon $(OutDir)\ntfonts2.fon 	copy doc\xtrekrc $(OutDir)
 # End Special Build Tool
 
 !ENDIF 
@@ -239,6 +231,10 @@ SOURCE=.\src\pingstats.c
 # Begin Source File
 
 SOURCE=.\src\planetlist.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\playback.c
 # End Source File
 # Begin Source File
 
