@@ -130,6 +130,9 @@
 /*      VSHIELD_BITMAPS         - damage dependent shields (hull)               */
 #define VSHIELD_BITMAPS
 
+/*      JUBILEE_PHASERS         - Cycle phaser color when it's a hit            */
+#define JUBILEE_PHASERS
+
 /*      WARP_DEAD               - Use death detection
 */
 #undef  WARP_DEAD
@@ -158,6 +161,13 @@
 #define DIST_KEY_NAME
 #define XTRA_MESSAGE_UI
 #define PHASER_STATS
+
+
+/* Swap ports around to try to go through firewalls */
+//#define USE_PORTSWAP
+
+/* Enabled playback of recorded games */
+#define RECORDGAME
 
 #endif          /* COW */
 
