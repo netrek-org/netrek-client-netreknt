@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------
-   Misclib.C -- Code entry point for Misclib dynamic link library
+   Planlib.C -- Code entry point for Planlib dynamic link library
    --------------------------------------------------------------*/
    
 #include <windows.h>

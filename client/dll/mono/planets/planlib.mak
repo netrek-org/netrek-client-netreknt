@@ -7,6 +7,8 @@ DLLFLAGS = -SUBSYSTEM:windows -DLL
 GUILIBS = -DEFAULTLIB:user32.lib gdi32.lib winmm.lib comdlg32.lib comctl32.lib
 RC = rc
 
+all : planlibb.dll planlibr.dll planlibm.dll
+
 planlibb.dll : planlib.obj planlibb.res
 	$(LINKER) $(DLLFLAGS) -OUT:planlibb.dll planlib.obj planlibb.res $(GUILIBS)
 
