@@ -603,6 +603,7 @@ void testmacro(char *bufa, char *bufb, int *inda, int *indb)
               warning("Bad character in Macro!");
               printf("Unrecognizable special character in macro pass2: %c  Trying to continue.\n",
                      bufa[(*inda) - 1]);
+              fprintf(stderr, "macro: %s\n", bufa);
               state = 0;
               continue;
               break;

@@ -545,6 +545,7 @@ int cowmain(char *server, int port, char *name)
 
   pseudo[0] = defpasswd[0] = '\0';
 
+#ifdef RECORDGAME
   if (recordFileName != NULL)
     {
       recordFile = fopen(recordFileName, "wb");
@@ -555,6 +556,7 @@ int cowmain(char *server, int port, char *name)
 
         }
     }
+#endif
   if (logFileName != NULL)
     {
       logFile = fopen(logFileName, "a");
