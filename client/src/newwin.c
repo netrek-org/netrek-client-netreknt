@@ -339,12 +339,23 @@ savebitmaps(void)
   	exit(1);
       }
   }
+  
+//  if (colorClient) {
+//	if ((hWeapLibrary = LoadLibrary("WEAPLIB.DLL")) == NULL)
+//		{
+//			fprintf(stderr, "Could not open weaplib.dll\n");
+//			exit(1);
+//		}
+//	else {
+		if ((hWeapLibrary = LoadLibrary("WEAPLIBM.DLL")) == NULL)
+		{
+			fprintf(stderr, "Could not open weaplibm.dll\n");
+			exit(1);
+		}
+//	}
+//  }
 
-  if ((hWeapLibrary = LoadLibrary("WEAPLIB.DLL")) == NULL)
-    {
-	fprintf(stderr, "Could not open weaplib.dll\n");
-	exit(1);
-    }
+
 
   if (colorClient) {
     if ((hMiscLibrary = LoadLibrary("MISCLIB.DLL")) == NULL)

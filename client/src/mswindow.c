@@ -355,7 +355,7 @@ if (RomCursor == NULL) printf("Whhops, there it is!\n");
    //Create the fonts that we need. The fonts are actually in our resource file
    strcpy(FileName, GetExeDir());
    strcat(FileName, FontFileName);
-   AddFontResource(FileName);
+   i = AddFontResource(FileName);
 
    memset(&lf, 0, sizeof(LOGFONT));
    strcpy(lf.lfFaceName, "Netrek");

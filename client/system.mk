@@ -12,7 +12,7 @@
 CWHO = sheldon@visi.com
 
 # Comment this out for production code
-# DEBUG = 1
+DEBUG = 1
 
 # This defines whether we are using RSA or not
 RSA = 1

@@ -21,6 +21,9 @@ This should allow a way to easily utilize 256 color bitmaps
 Should also look into color palettes.  One of the problems is having
 multiple copies of Netrek open using color bitmaps.
 
+Ok, now the suggestion is to take the bitmaps out of resource DLLs, instead
+loading the bmp from a file, thus allowing even easier configuration.
+
 ----
 
 DirectX
@@ -63,3 +66,7 @@ Sounds
 - Work on sound configuration.  Put Wav files into resource DLL?  Allowing
 for easy customization.
 
+----
+
+Features
+- Remove the stupid ctrl-b bombing message, and ignore bombing messages coming from other clients.
