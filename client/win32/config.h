@@ -477,7 +477,11 @@
 #define WAIT3(x,y,z)  wait3(x, y, z)
 #endif
 
-#if (defined(HAVE_RANDOM) && defined(HAVE_SETSTATE)) || !defined(HAVE_RANDOM)
+// Win32 has a rand() and srand() function.... use that.
+#ifdef WIN32
+#define RANDOM()	rand()
+#define SRANDOM(x)	srand(x)
+#elif (defined(HAVE_RANDOM) && defined(HAVE_SETSTATE)) || !defined(HAVE_RANDOM)
 #define RANDOM()        random()
 #define SRANDOM(x)      srandom(x)
 #else
