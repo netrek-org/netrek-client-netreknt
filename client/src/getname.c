@@ -1,14 +1,14 @@
-
-/* getname.c
+/*
+ * getname.c
  * 
  * Kevin P. Smith 09/28/88
  * 
  */
- 
-/* Took code from SWINE which had been modifified by Greg Chung
+
+ /* Took code from SWINE which had been modifified by Greg Chung to display screen nicely.
    SRS 2/23/98
  */
- 
+
 #include "config.h"
 #include "copyright2.h"
 
@@ -16,24 +16,27 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/file.h>
+#ifdef hpux
+#include <time.h>
+#else
 #include <sys/time.h>
+#endif
 #include <errno.h>
 #include <pwd.h>
 #include <string.h>
-
-#include INC_SYS_SELECT
-
 #include <ctype.h>
+
 #include "Wlib.h"
 #include "defs.h"
 #include "struct.h"
 #include "data.h"
 
-static char tempname[16];
-static char password1[16];
-static char password2[16];
-static int state, autolog;
-static char *alf = NULL;
+
+static char     tempname[16];
+static char     password1[16];
+static char     password2[16];
+static int      state;
+static int      autologin;
 
 #define SIZEOF(a)       (sizeof (a) / sizeof (*(a)))
 #define ST_GETNAME 0
@@ -42,53 +45,33 @@ static char *alf = NULL;
 #define ST_MAKEPASS2 3
 #define ST_DONE 4
 
-void    loginproced(char, char *);
-void    adjustString(char, char *, char *);
+//void    loginproced(char, char *);
+void    adjustString(unsigned char, char *, char *);
 extern void terminate(int error);
 extern HINSTANCE MyInstance;
 void loaddude();
 void checkpassword();
 void makeNewGuy();
 void displayStartup();
+void try_autologin(char *);
+
 
 void noautologin(void)
 {
-  autolog = 0;
+  static char *alf = "Automatic login failed";
+
+  autologin = 0;
   *defpasswd = *password1 = *password2 = '\0';
-  alf = "Automatic login failed";
-  W_WriteText(w, 100, 130, textColor, alf, strlen(alf),
-              W_BoldFont);
+  W_WriteText (w, 100, 130, textColor, alf, strlen (alf),
+               W_BoldFont);
 
-}
-
-void handleWEvents(char *defname)
-{
-  int     do_redraw = 0;
-  char    ch;
-  W_Event event;
-
-  while (W_EventsPending())
-    {
-      W_NextEvent(&event);
-      if (event.Window != w)
-        continue;
-      switch ((int) event.type)
-        {
-        case W_EV_EXPOSE:
-          do_redraw = 1;
-          break;
-        case W_EV_KEY:
-          ch = event.key;
-          if (!autolog)
-            loginproced(ch, defname);
-        }
-    }
-  if (do_redraw)
-    displayStartup(defname);
 }
 
 void showreadme(void)
 {
+
+  // Readme is displayed below prompt for username
+
   static char *README[] =
   {
     "",
@@ -119,23 +102,25 @@ void showreadme(void)
     }
 }
 
-void getname(char *defname, char *defpasswd)
-
-/* Let person identify themselves from w */
+void
+getname(defname)
+    char           *defname;
+    /* Let person identify themselves from w */
 {
-  register char ch;
-  int     secondsLeft = 199, laststate;
-  char    tempstr[40];
-  LONG    lasttime;
-  register int j;
-  struct timeval timeout;
-  fd_set  readfds;
+   int             secondsLeft = 99;
+   W_Event         event;
+   unsigned char   ch;
+   char            tempstr[40];
+   long            lasttime;
+   int j;
+   struct timeval  tv;
+   fd_set	   mask;
 
-  autolog = (*defpasswd && *defname) ? 1 : 0;
+   autologin = (*defpasswd && *defname) ? 1 : 0;
 
-  MZERO(mystats, sizeof(struct stats));
+   MZERO(mystats, sizeof(struct stats));
 
-  mystats->st_tticks = 1;
+  // Reset the keymap for our player record
   for (j = 0; j < 95; j++)
     {
       mystats->st_keymap[j] = j + 32;
@@ -147,424 +132,327 @@ void getname(char *defname, char *defpasswd)
       mystats->st_keymap[j + 384] = j + 32;
 #endif
     }
-  mystats->st_keymap[95] = 0;
-  mystats->st_flags = ST_MAPMODE + ST_NAMEMODE + ST_SHOWSHIELDS +
+   mystats->st_keymap[95] = 0;
+   mystats->st_tticks = 1;
+   mystats->st_flags = ST_MAPMODE + ST_NAMEMODE + ST_SHOWSHIELDS +
       ST_KEEPPEACE + ST_SHOWLOCAL * 2 + ST_SHOWGLOBAL * 2;
+   lasttime = time(NULL);
+   tempname[0] = '\0';
+   password1[0] = '\0';
+   password2[0] = '\0';
+   state = ST_GETNAME;
 
-  lasttime = time(NULL);
+   if (autologin)
+        try_autologin(defname);
+   if (state == ST_DONE)
+         return;
 
-  if (ghoststart)
-    return;
+   displayStartup(defname);
+   for (;;) {
+      /* TSH: added select here so this doesn't busy wait (only done once
+	 but it messes up performance metrics) */
 
-  tempname[0] = '\0';
-  password1[0] = '\0';
-  password2[0] = '\0';
+      if (state == ST_DONE) {
+	 W_ClearWindow(w);
+	 return;
+      }
 
-  laststate = state = ST_GETNAME;
-  displayStartup(defname);
-  while (1)
-    {
-      handleWEvents(defname);
-
-      if (!autolog)
-        {
-#ifndef WIN32           
-          timeout.tv_sec = 1;
-          timeout.tv_usec = 0;
-#else
-          /* Since we don't have a socket to check on Win32
-             for windowing system events, we set the timeout to zero and
-             effectively poll. Yes, I could do the correct thing
-             and call WaitForMultipleObjects() etc. but I don't feel like it */
-          timeout.tv_sec = 0;
-          timeout.tv_usec = 100000;
-#endif          
-          FD_ZERO(&readfds);
-          FD_SET(sock, &readfds);
-          if (udpSock >= 0)
-            FD_SET(udpSock, &readfds);
-#ifndef WIN32            
-          FD_SET(W_Socket(), &readfds);
-#endif
-          if (select(32, &readfds, 0, 0, &timeout) < 0)
-            {
-              perror("select");
-              continue;
-            }
-
-          if (FD_ISSET(sock, &readfds)
-              || (udpSock >= 0 && FD_ISSET(udpSock, &readfds)))
-            readFromServer(&readfds);
+      while(!W_EventsPending()){
 
 #ifndef WIN32
-          if (FD_ISSET(W_Socket(), &readfds))
+	 tv.tv_sec = 1;
+	 tv.tv_usec = 0;
 #else
-          if (W_EventsPending())
-#endif                    
-            handleWEvents(defname);
-        }
-      else
-        {
-          readFromServer(&readfds);
-        }
-
-      if (isServerDead())
-        {
-          printf("Shit, we were ghostbusted\n");
-
-#ifdef AUTOKEY
-          if (autoKey)
-            W_AutoRepeatOn();
+   tv.tv_sec = 0;
+   tv.tv_usec = 100000;
 #endif
-
-          terminate(0);
-        }
-
-      if (time(0) != lasttime)
-        {
-          lasttime++;
-          secondsLeft--;
-          showreadme();
-          if (!autolog)
-            {
-              sprintf(tempstr, "Seconds to go: %d ", secondsLeft);
-              W_WriteText(w, 150, 400, textColor, tempstr, strlen(tempstr),
-                          W_BoldFont);
-            }
-          if (secondsLeft == 0)
-            {
-              me->p_status = PFREE;
-              printf("Timed Out.\n");
-
-#ifdef AUTOKEY
-              if (autoKey)
-                W_AutoRepeatOn();
+	 FD_ZERO(&mask);
+#ifndef WIN32
+	 FD_SET(W_Socket(), &mask);
 #endif
+	 FD_SET(sock, &mask);
+	 /* udp sock will not be active here */
+	 select(32, &mask, 0, 0, &tv);
 
-              terminate(0);
-            }
-        }
-      if (state == ST_DONE)
-        {
-          W_ClearWindow(w);
-          W_ClearWindow(mapw);
-          return;
-        }
-      if (autolog)
-        {
-          switch (state)
-            {
-            case ST_GETNAME:
-              tempname[0] = '\0';
-              ch = 13;
-              j = 0;
-              break;
+	 if (lasttime != time(NULL)) {
+	    lasttime++;
+	    secondsLeft--;
+      showreadme();
+	    sprintf(tempstr, "Seconds to go: %d ", secondsLeft);
+	    W_WriteText(w, 150, 400, textColor, tempstr, strlen(tempstr),
+			W_BoldFont);
+	    if (secondsLeft == 0) {
+	       me->p_status = PFREE;
+	       printf("Auto-Quit\n");
+	       exit(0);
+	    }
+	 }
 
-            case ST_GETPASS:
-            case ST_MAKEPASS1:
-            case ST_MAKEPASS2:
-              ch = defpasswd[j++];
-              if (ch == '\0')
-                {
-                  j = 0;
-                  ch = 13;
-                }
-              break;
+	 if(FD_ISSET(sock, &mask)){
+	    readFromServer(&mask);
 
-            default:
-              break;
-            }
+	    if (isServerDead()) {
+	       printf("Ack!  We've been ghostbusted!\n");
+	       exit(0);
+	    }
+	 }
 
-          loginproced(ch, defname);
+	 if (!FD_ISSET(W_Socket(), &mask))
+	    continue;
+      }
 
-        }
+      W_NextEvent(&event);
+      if (event.Window != w)
+	 continue;
+      switch ((int) event.type) {
+      case W_EV_EXPOSE:
+	 displayStartup(defname);
+	 sprintf(tempstr, "Seconds to go: %d ", secondsLeft);
+	 W_WriteText(w, 150, 400, textColor, tempstr, strlen(tempstr),
+		     W_BoldFont);
+	 break;
+      case W_EV_KEY:
+	 ch = event.key;
+	 if (ch == 10)
+	    ch = 13;
 
-      laststate = state;
-    }
+	 switch(ch){
+	    case 4:
+	    case 'd' +  96:
+	    case 'D' +  96:
+	       if(state == ST_GETNAME && *tempname == 0)
+		  exit(0);
+	       break;
+	    default:
+	       break;
+	 }
+	 if (ch < 32 && ch != 21 && ch != 13 && ch != 8)
+	    break;
+	 switch (state) {
+	 case ST_GETNAME:
+	    if (ch == 13) {
+	       if (*tempname == '\0') {
+		  strcpy(tempname, defname);
+	       }
+	       loaddude();
+	       displayStartup(defname);
+	    } else {
+	       adjustString(ch, tempname, defname);
+	    }
+	    break;
+	 case ST_GETPASS:
+	    if (ch == 13) {
+	       checkpassword();
+	       displayStartup(defname);
+	    } else {
+	       adjustString(ch, password1, defname);
+	    }
+	    break;
+	 case ST_MAKEPASS1:
+	    if (ch == 13) {
+	       state = ST_MAKEPASS2;
+	       displayStartup(defname);
+	    } else {
+	       adjustString(ch, password1, defname);
+	    }
+	    break;
+	 case ST_MAKEPASS2:
+	    if (ch == 13) {
+	       makeNewGuy();
+	       displayStartup(defname);
+	    } else {
+	       adjustString(ch, password2, defname);
+	    }
+	    break;
+	 }
+      }
+   }
+}
+
+
+void
+try_autologin(defname)
+char *defname;
+{
+   strcpy(tempname, defname);
+   loaddude();
+   if (state != ST_DONE) {
+       strcpy(password1, defpasswd);
+       checkpassword();
+   }
+   if (state == ST_GETNAME)
+        noautologin();
 }
 
 void
-        loginproced(char ch, char *defname)
+loaddude()
+    /*
+     * Query dude.
+     */
 {
-
-  if (ch == 10)
-    ch = 13;
-
-#ifdef CONTROL_KEY
-  if ((ch == 4 || ch == ((char) ('d' + 96)) || ch == ((char) ('D' + 96))) && state == ST_GETNAME && *tempname == '\0')
-#else
-  if (ch == 4 && state == ST_GETNAME && *tempname == '\0')
-#endif
-
-    {
-
-#ifdef AUTOKEY
-      if (autoKey)
-        W_AutoRepeatOn();
-#endif
-
-      terminate(0);
-    }
-  if (ch < 32 && ch != 21 && ch != 13 && ch != 8)
-    return;
-  switch (state)
-    {
-    case ST_GETNAME:
-      if (ch == 13)
-        {
-          if (*tempname == '\0')
-            {
-              STRNCPY(tempname, defname, sizeof(tempname));
-            }
-          loaddude();
-          displayStartup(defname);
-        }
-      else
-        {
-          adjustString(ch, tempname, defname);
-        }
-      break;
-    case ST_GETPASS:
-      if (ch == 13)
-        {
-          checkpassword();
-          displayStartup(defname);
-        }
-      else
-        {
-          adjustString(ch, password1, defname);
-        }
-      break;
-    case ST_MAKEPASS1:
-      if (ch == 13)
-        {
-          state = ST_MAKEPASS2;
-          displayStartup(defname);
-        }
-      else
-        {
-          adjustString(ch, password1, defname);
-        }
-      break;
-    case ST_MAKEPASS2:
-      if (ch == 13)
-        {
-          makeNewGuy();
-          displayStartup(defname);
-        }
-      else
-        {
-          adjustString(ch, password2, defname);
-        }
-      break;
-    }
-
-  return;
-
-}
-
-void loaddude(void)
-/* Query dude. */
-{
-  char    ppwd[16];
-
-  STRNCPY(ppwd, "\0\0\0", 4);
-  if (strncmp(tempname, "Guest", 5) == 0 || strncmp(tempname, "guest", 5) == 0)
-    {
+   if (strcmp(tempname, "Guest") == 0 || strcmp(tempname, "guest") == 0) {
       loginAccept = -1;
-      sendLoginReq(tempname, ppwd, login, 0);
+      sendLoginReq(tempname, "", (char *) login, 0);
       state = ST_DONE;
-      me->p_pos = -1;
-      me->p_stats.st_tticks = 1;                 /* prevent overflow */
-      STRNCPY(me->p_name, tempname, sizeof(tempname));
-      while (loginAccept == -1)
-        {
-          socketPause();
-          readFromServer(NULL);
-          if (isServerDead())
-            {
-              printf("Server is hosed.\n");
-
-#ifdef AUTOKEY
-              if (autoKey)
-                W_AutoRepeatOn();
-#endif
-
-              terminate(0);
-            }
-        }
-      if (loginAccept == 0)
-        {
-          printf("Hmmm... The SOB server won't let me log in as guest!\n");
-
-#ifdef AUTOKEY
-          if (autoKey)
-            W_AutoRepeatOn();
-#endif
-
-          terminate(0);
-        }
+      me->p_stats.st_tticks = 1;/* prevent overflow */
+      strcpy(me->p_name, tempname);
+      while (loginAccept == -1) {
+	 socketPause();
+	 readFromServer(NULL);
+	 if (isServerDead()) {
+	    printf("Server is dead!\n");
+	    exit(0);
+	 }
+      }
+      if (loginAccept == 0) {
+	 printf("Hmmm... The SOB server won't let me log in as guest!\n");
+	 exit(0);
+      }
       return;
-    }
-  /* Ask about the user */
-  loginAccept = -1;
-  sendLoginReq(tempname, ppwd, login, 1);
-  while (loginAccept == -1)
-    {
+   }
+   /* Ask about the user */
+   loginAccept = -1;
+   sendLoginReq(tempname, "", login, 1);
+   while (loginAccept == -1) {
       socketPause();
       readFromServer(NULL);
-      if (isServerDead())
-        {
-          printf("Server is hosed.\n");
-
-#ifdef AUTOKEY
-          if (autoKey)
-            W_AutoRepeatOn();
-#endif
-
-          terminate(0);
-        }
-    }
-  *password1 = *password2 = 0;
-  if (loginAccept == 0)
-    {
+      if (isServerDead()) {
+	 printf("Server is dead!\n");
+	 exit(0);
+      }
+   }
+   *password1 = *password2 = 0;
+   if (loginAccept == 0) {
       state = ST_MAKEPASS1;
-    }
-  else
-    {
+   } else {
       state = ST_GETPASS;
-    }
-}
-
-void checkpassword(void)
-/* Check dude's password. If he is ok, move to state ST_DONE. */
-{
-  char   *s;
-
-  sendLoginReq(tempname, password1, login, 0);
-  loginAccept = -1;
-  while (loginAccept == -1)
-    {
-      socketPause();
-      readFromServer(NULL);
-      if (isServerDead())
-        {
-          printf("Server is hosed.\n");
-
-#ifdef AUTOKEY
-          if (autoKey)
-            W_AutoRepeatOn();
-#endif
-
-          terminate(0);
-        }
-    }
-  if (loginAccept == 0)
-    {
-      if (!autolog)
-        {
-          s = "Bad password!";
-          W_WriteText(w, 100, 100, textColor, s, strlen(s), W_BoldFont);
-          (void) W_EventsPending();
-          sleep(3);
-          W_ClearWindow(w);
-        }
-      else
-        noautologin();
-      *tempname = 0;
-      state = ST_GETNAME;
-      return;
-    }
-  STRNCPY(me->p_name, tempname, sizeof(tempname));
-  keeppeace = (me->p_stats.st_flags / ST_KEEPPEACE) & 1;
-  state = ST_DONE;
-}
-
-void makeNewGuy(void)
-/* Make the dude with name tempname and password password1. Move to state
- * ST_DONE. */
-{
-  char   *s;
-
-  if (strcmp(password1, password2) != 0)
-    {
-      if (!autolog)
-        {
-          s = "Passwords do not match";
-          W_WriteText(w, 100, 150, textColor, s, strlen(s), W_BoldFont);
-          (void) W_EventsPending();
-          sleep(3);
-          W_ClearWindow(w);
-        }
-      else
-        noautologin();
-      *tempname = 0;
-      state = ST_GETNAME;
-      return;
-    }
-
-  /* same routine! */
-  checkpassword();
+   }
 }
 
 void
-        adjustString(char ch, char *str, char *defname)
+checkpassword()
+    /*
+     * Check dude's password. If he is ok, move to state ST_DONE.
+     */
 {
-  int     strLen;
+   char           *s;
 
-  strLen = strlen(str);
+   sendLoginReq(tempname, password1, login, 0);
+   loginAccept = -1;
+   while (loginAccept == -1) {
+      socketPause();
+      readFromServer(NULL);
+      if (isServerDead()) {
+	 printf("Server is dead!\n");
+	 exit(0);
+      }
+   }
+   if (loginAccept == 0) {
+      s = "Bad password!";
+      W_WriteText(w, 100, 100, textColor, s, strlen(s), W_BoldFont);
+      (void) W_EventsPending();
+      sleep(1);
+      W_ClearWindow(w);
+      *tempname = 0;
+      state = ST_GETNAME;
+      return;
+   }
+   strcpy(me->p_name, tempname);
 
-  if (ch == 21)
-    {
-      *str = '\0';
-/* We actually want to display for password SRS 2/23/98
-      if (state == ST_GETNAME)
-*/
-        displayStartup(defname);
-    }
-  else if (ch == 8 || ch == '\177')
-    {
-      if (strLen > 0)
-        {
-          str[strLen - 1] = '\0';
-/* We actually want to display for password SRS 2/23/98
-          if (state == ST_GETNAME)
-*/
-            displayStartup(defname);
-        }
-    }
-  else
-    {
-      if (strLen == 15)
-        return;
-      str[strLen + 1] = '\0';
-      str[strLen] = ch;
-/* We actually want to display for password SRS 2/23/98
-      if (state == ST_GETNAME)
-*/
-        displayStartup(defname);
-    }
+   state = ST_DONE;
 }
+
+void
+makeNewGuy()
+    /*
+     * Make the dude with name tempname and password password1. Move to state
+     * ST_DONE.
+     */
+{
+   char           *s;
+
+   if (strcmp(password1, password2) != 0) {
+      s = "Passwords do not match";
+      W_WriteText(w, 100, 120, textColor, s, strlen(s), W_BoldFont);
+      (void) W_EventsPending();
+      sleep(3);
+      W_ClearWindow(w);
+      *tempname = 0;
+      state = ST_GETNAME;
+      return;
+   }
+   /* same routine! */
+   checkpassword();
+}
+
+void
+adjustString(ch, str, defname)
+    unsigned char   ch;
+    char            *str;
+    char           *defname;
+{
+   switch((unsigned char) ch){
+      case 21:
+      case 'u' + 96:
+      case 'U' + 96:
+	 *str = '\0';
+	 if (state == ST_GETNAME)
+	    displayStartup(defname);
+	 break;
+      
+      case 8:
+      case '\177':
+      case 'h' + 96:
+      case 'H' + 96:
+	 if (strlen(str) > 0) {
+	    str[strlen(str) - 1] = '\0';
+	    if (state == ST_GETNAME)
+	       displayStartup(defname);
+	 }
+	 break;
+      
+      default:
+	 if (strlen(str) == 15)
+	    return;
+	 str[strlen(str) + 1] = '\0';
+	 str[strlen(str)] = ch;
+	 if (state == ST_GETNAME)
+	    displayStartup(defname);
+	 break;
+   }
+}
+
+
+
+void noserver(void)
+{
+  printf("No server name was given. Please put a default server in\n");
+  printf("your .xtrekrc file or specify the server in the command line.\n");
+  terminate(1);
+}
+
+
 
 void
 displayFormat (char *defname)
 {
-	char s[100];
-	char *t;
+        char s[100];
+        char *t;
 
-	t = "Enter your character name here.  Use 'guest' to use a temporary";
-	W_WriteText (w, 40, 30, textColor, t, strlen (t), W_RegularFont);
-	
-	t = "name.  Or, hit ^D (CTRL-D) with a blank name to exit immediately.";
-	W_WriteText (w, 40, 40, textColor, t, strlen (t), W_RegularFont);
-	
-	sprintf (s, "Character name (\"%s\"): ", defname);
-	W_WriteText (w, 40, 60, textColor, s, strlen (s), W_RegularFont);
-	
-	t = ".               .";
-	W_WriteText (w, 40 + ((20 + strlen (defname)) * W_Textwidth), 58,
-								textColor, t, strlen (t), W_RegularFont);
+        t = "Enter your character name here.  Use 'guest' to use a temporary";
+        W_WriteText (w, 40, 30, textColor, t, strlen (t), W_RegularFont);
+
+        t = "name.  Or, hit ^D (CTRL-D) with a blank name to exit immediately.";
+        W_WriteText (w, 40, 40, textColor, t, strlen (t), W_RegularFont);
+
+        sprintf (s, "Character name (\"%s\"): ", defname);
+        W_WriteText (w, 40, 60, textColor, s, strlen (s), W_RegularFont);
+
+        t = ".               .";
+        W_WriteText (w, 40 + ((20 + strlen (defname)) * W_Textwidth), 58,
+                                textColor, t, strlen (t), W_RegularFont);
 }
+
 
 void displayStartup(char *defname)
 
@@ -573,10 +461,10 @@ void displayStartup(char *defname)
   char    buf[100];
   char    s[100];
   register char *t;
-  
+
   displayFormat (defname);
 
-  if (state == ST_DONE || autolog)
+  if (state == ST_DONE || autologin)
     return;
 
   sprintf(buf, "Connection established to %s", serverName);
@@ -589,11 +477,10 @@ void displayStartup(char *defname)
                strlen (s), W_BoldFont);
   t = " ^ ";
   W_WriteText (w, 40 + (20 + strlen (defname) + strlen (tempname)) * W_Textwidth,
-               70, textColor, t, 3, W_RegularFont);
+                   70, textColor, t, 3, W_RegularFont);
 
   if (state == ST_GETPASS)
     {
-      alf = NULL;
       t = "Enter password: ";
       W_WriteText(w, 100, 80, textColor, t, strlen(t), W_BoldFont);
       t = ".               .";
@@ -605,7 +492,6 @@ void displayStartup(char *defname)
     }
   if (state > ST_GETPASS)
     {
-      alf = NULL;
       t = "You need to make a password.";
       W_WriteText(w, 100, 80, textColor, t, strlen(t), W_BoldFont);
       t = "So think of a password you can remember, and enter it.";
@@ -621,7 +507,6 @@ void displayStartup(char *defname)
     }
   if (state == ST_MAKEPASS2)
     {
-      alf = NULL;
       t = "Enter it again to make sure you typed it right.";
       W_WriteText(w, 100, 120, textColor, t, strlen(t), W_BoldFont);
       t = "Your password? :";
@@ -635,43 +520,3 @@ void displayStartup(char *defname)
 
     }
 }
-
-void noserver(void)
-{
-  printf("No server name was given. Please put a default server in\n");
-  printf("your .xtrekrc file or specify the server in the command line.\n");
-  terminate(1);
-}
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
