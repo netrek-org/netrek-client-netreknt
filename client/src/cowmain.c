@@ -658,15 +658,15 @@ int cowmain(char *server, int port, char *name)
 #endif
 
   /* Get login name */
-  if ((pwent = getpwuid(getuid())) != NULL)
-    (void) STRNCPY(login, pwent->pw_name, sizeof(login));
-  else
 #ifdef WIN32  /* Windows: if we can't get the login name, allow the user to specify */
-    if (cp = getdefault ("login"))
-        strncpy (login, cp, sizeof (login));
-    else
+  if (cp = getdefault ("login"))
+      strncpy (login, cp, sizeof (login));
+  else
 #endif
-    (void) STRNCPY(login, "Bozo", sizeof(login));
+    if ((pwent = getpwuid(getuid())) != NULL)
+      (void) STRNCPY(login, pwent->pw_name, sizeof(login));
+    else
+      (void) STRNCPY(login, "Bozo", sizeof(login));
 
   login[sizeof(login) - 1] = '\0';
 
@@ -904,8 +904,10 @@ int cowmain(char *server, int port, char *name)
         /* `=' style update to get the kills in the playerlist right */
         sendUdpReq(COMM_UPDATE);
 #endif
+		/* Send request for updatespeed.  New servers now support 10 u/s */
+		sendUpdatePacket(1000000 / updatespeed);        
         
-        isFirstEntry = 0;
+		isFirstEntry = 0;
       }
 
 
