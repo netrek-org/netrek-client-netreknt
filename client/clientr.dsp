@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="clientr" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
@@ -22,6 +22,7 @@ CFG=clientr - Win32 Debug
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -55,7 +56,7 @@ OutDir=.\Release
 WkspDir=.
 TargetPath=.\netrek.exe
 InputPath=.\netrek.exe
-SOURCE=$(InputPath)
+SOURCE="$(InputPath)"
 
 "$(WkspDir)dummy" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	StampVer -vsrc\stampver.inf -i4 -j4 $(TargetPath) 
@@ -78,7 +79,7 @@ SOURCE=$(InputPath)
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /Gm /GX /Zi /Od /I "win32" /I "win32\h" /I "include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "DEBUG" /FR /YX /FD /c
+# ADD CPP /nologo /MT /W3 /Gm /GX /ZI /Od /I "win32" /I "win32\h" /I "include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "DEBUG" /D "RSA" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -86,13 +87,13 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libcmt.lib user32.lib gdi32.lib wsock32.lib kernel32.lib winmm.lib mpr.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib /out:"Debug/netrek.exe" /pdbtype:sept
+# ADD LINK32 libcmt.lib user32.lib gdi32.lib wsock32.lib kernel32.lib winmm.lib mpr.lib libmp.lib libgmp.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib /out:"Debug/netrek.exe" /pdbtype:sept /libpath:"win32/lib"
 # Begin Custom Build
 OutDir=.\Debug
 WkspDir=.
 TargetPath=.\Debug\netrek.exe
 InputPath=.\Debug\netrek.exe
-SOURCE=$(InputPath)
+SOURCE="$(InputPath)"
 
 "$(WkspDir)dummy" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	StampVer -vsrc\stampver.inf -i4 -j4 $(TargetPath) 
@@ -260,6 +261,30 @@ SOURCE=.\src\rotate.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\rsa_box.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rsa_box_0.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rsa_box_1.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rsa_box_2.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rsa_box_3.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\rsa_box_4.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\senddist.c
 # End Source File
 # Begin Source File
@@ -330,13 +355,6 @@ SOURCE=.\src\main.ico
 # Begin Source File
 
 SOURCE=.\src\netrek.rc
-
-!IF  "$(CFG)" == "clientr - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "clientr - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project
