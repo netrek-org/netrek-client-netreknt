@@ -174,3 +174,25 @@ Further documentation on the Software will be forthcoming.
             which do not work right with color bitmaps.
           - No documentation yet, available shortly.
 
+11-Mar-99
+        - Changes cursors so that they are all 32x32 bitmaps.
+          Apparently, Win95/98 has a problem with odd sized cursors.
+
+4-Apr-99
+        - Not everything was done today, but...
+          - Created .dsw and .dsp files, moved things away from makefiles
+            to using Visual Studio IDE
+        - Added call to SendUpdates in main, such that the updatespersec
+          value in your xtrekrc is processed.
+
+11-Mar-99
+        - Modified cowmain.c to synchronize request of 10 updates/sec
+          with server.  Will now recognize xtrekrc option.
+        - xtrekrc login option is now recognized prior to looking for
+          Windows userid.  I didn't see the point in forcing userid,
+          since most windows users can change this anyway.
+
+9-Jun-99
+        - Updated Visual C++ project files for Visual Studio 6.0
+        - Took getname.c from BRMH and implemented N:1999 modifications
+          purpose of this was to fix ability to do autologin
