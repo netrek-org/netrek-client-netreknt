@@ -487,7 +487,7 @@ int     passive = 0;
 int     checking = 0;
 
 #ifdef META
-int     usemeta = 0;
+int     usemeta = 1;
 
 #endif
   

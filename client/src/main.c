@@ -4,7 +4,7 @@
 #include "copyright.h"
 
 #include <stdio.h>
-#include INC_STRINGS
+#include <string.h>
 #include <time.h>
 #include INC_SYS_TIME
 
@@ -170,11 +170,12 @@ void main2(int argc, char *argv[])
 
             case 'h':
               if (i< argc) {
-		servertmp = argv[i+1];
-		i++;
-		}
-	      else
-	        usage++;
+            		servertmp = argv[i+1];
+            		usemeta = 0;
+            		i++;
+          		}
+      	      else
+	              usage++;
 
 #ifdef GATEWAY
               gw_mach = servertmp;
