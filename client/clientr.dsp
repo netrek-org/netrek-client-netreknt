@@ -50,12 +50,12 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 libcmt.lib user32.lib gdi32.lib wsock32.lib kernel32.lib winmm.lib mpr.lib /nologo /subsystem:console /machine:I386 /nodefaultlib /out:"netrek.exe"
+# ADD LINK32 libcmt.lib user32.lib gdi32.lib wsock32.lib kernel32.lib winmm.lib mpr.lib libmp.lib libgmp.lib /nologo /subsystem:console /machine:I386 /nodefaultlib /out:"Release/netrek.exe" /libpath:"win32/lib"
 # Begin Custom Build
 OutDir=.\Release
 WkspDir=.
-TargetPath=.\netrek.exe
-InputPath=.\netrek.exe
+TargetPath=.\Release\netrek.exe
+InputPath=.\Release\netrek.exe
 SOURCE="$(InputPath)"
 
 "$(WkspDir)dummy" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
