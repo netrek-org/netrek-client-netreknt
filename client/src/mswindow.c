@@ -2117,12 +2117,12 @@ void W_WriteText(W_Window window, int x,int y,W_Color color,char *str,int len, W
          break;
 
       case WIN_SCROLL:
-         str[len]=0;
+//         str[len]=0;
          AddToScrolling(win, color, str, len);
          break;
 
       case WIN_MENU:
-         str[len]=0;
+//         str[len]=0;
          ChangeMenuItem(win, y, str, len, color);
          break;
 
