@@ -123,6 +123,8 @@ extern int updatespeed;
 
 extern int SBhours;
 
+extern int showMySpeed;
+
 #ifdef SHORT_PACKETS
 extern int why_dead;
 extern int tryShort, tryShort1;

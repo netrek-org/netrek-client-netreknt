@@ -138,6 +138,7 @@ static void DrawShips(void)
   register struct phaser *php;
   
   char idbuf[10];
+  int buflen = 1;
   const int view = SCALE * WINSIDE / 2;
   int dx, dy, px, py, wx, wy, tx, ty, lx, ly;
   
@@ -374,14 +375,33 @@ static void DrawShips(void)
                     color = rColor;
                     break;
                   }
+                  
+                if (showMySpeed)
+                  {
+                    if (j->p_speed <10)
+                      {
+                        idbuf[1] = ',';
+                        idbuf[2] = j->p_speed + '0';
+                        idbuf[3] = '\0';
+                        buflen = 3;
+                      }
+                      else
+                      {
+                        idbuf[1] = ',';
+                        idbuf[2] = j->p_speed / 10 + '0';
+                        idbuf[3] = j->p_speed % 10 + '0';
+                        idbuf[4] = '\0';
+                        buflen = 4;
+                      }
+                }
               }
             W_MaskText(w, dx + (j->p_ship.s_width / 2),
                        dy - (j->p_ship.s_height / 2), color,
-                       idbuf, 1, shipFont(j));
+                       idbuf, buflen, shipFont(j));
 
             clearzone[0][clearcount] = dx + (j->p_ship.s_width / 2);
             clearzone[1][clearcount] = dy - (j->p_ship.s_height / 2);
-            clearzone[2][clearcount] = W_Textwidth;
+            clearzone[2][clearcount] = buflen * W_Textwidth;
             clearzone[3][clearcount] = W_Textheight;
             clearcount++;
           }

@@ -2475,6 +2475,7 @@ void sendUdpReq(int req)
 #endif
 
 #ifdef USE_PORTSWAP
+fprintf(stderr, "Using portswap\n");
   packet.connmode = CONNMODE_PORT;               /* have him send his port */
 #else
   packet.connmode = CONNMODE_PACKET;             /* we get addr from packet */
@@ -2559,6 +2560,7 @@ void    handleUdpReply(struct udp_reply_spacket *packet)
             {
 
 #ifdef USE_PORTSWAP
+fprintf(stderr, "Using portswap\n");
               udpServerPort = ntohl(packet->port);
               if (connUdpConn() < 0)
                 {
@@ -2724,6 +2726,7 @@ connUdpConn()
   struct sockaddr_in addr;
   int     len;
 
+fprintf(stderr, "Using portswap\n");
   addr.sin_addr.s_addr = serveraddr;
   addr.sin_family = AF_INET;
   addr.sin_port = htons(udpServerPort);
@@ -2753,6 +2756,7 @@ recvUdpConn(void)
   MZERO(&from, sizeof(from));                    /* don't get garbage if
                                                   * really broken */
 
+fprintf(stderr, "Using portswap\n");
   /* we patiently wait until the server sends a packet to us */
   /* (note that we silently eat the first one) */
   UDPDIAG(("Issuing recvfrom() call\n"));

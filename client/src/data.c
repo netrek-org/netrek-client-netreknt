@@ -344,6 +344,8 @@ char    cloakChars[3] = "??";
 int     showIND = 0;
 int     newPlist = 0;
 
+int     showMySpeed = 0;
+
 /* tried to automate this as much as possible... the entries are * the
  * character, string identifier, and the default macro for * each distress
  * type. */

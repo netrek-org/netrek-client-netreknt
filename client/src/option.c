@@ -193,7 +193,9 @@ struct option Ship_Menu[] =
 
   {1, "use warning shields", &warnShields, 0, 0, 0, NULL, NULL},
 
-{1, "show tractor/pressor beams", &showTractorPressor, 0, 0, 0, NULL, NULL},
+  {1, "show speed on tactical", &showMySpeed, 0, 0, 0, NULL, NULL},
+  
+  {1, "show tractor/pressor beams", &showTractorPressor, 0, 0, 0, NULL, NULL},
   {1, "show tractors after lock ", &continuetractor, 0, 0, 0, NULL, NULL},
   {1, "enemy phaser width: %d", &enemyPhasers, 0, 0, 0, NULL, &enPhasRng},
   {1, "shrink my phaser by %d/16", &phaserShrink, 0, 0, 0, NULL,

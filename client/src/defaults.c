@@ -644,6 +644,8 @@ highlightFriendlyPhasers = booleanDefault("highlightFriendlyPhasers",
   /* SRS 12/94, ignore the Capslock key */
   ignoreCaps = booleanDefault("ignoreCaps", ignoreCaps);
 
+  showMySpeed = booleanDefault("showMySpeed", showMySpeed);
+  
 #ifdef SOUND
   sound_init = booleanDefault("sound", sound_init);
 #endif
