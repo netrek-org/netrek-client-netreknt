@@ -2678,11 +2678,13 @@ void ChangeMenuItem(Window *win, int n, char *str, int len, W_Color color)
    if (n >= win->NumItems)
       return;
 
-   if (p->string)
-      free(p->string);
+   if (p->string) {
+      free(p->string);    // Free memory
+   }
 
    p->string = (char *) malloc(len + 1);
-   strcpy(p->string, str);
+
+   strncpy(p->string, str, len);
    p->color = color;
    p->len = len;
 
