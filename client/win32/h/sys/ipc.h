@@ -13,7 +13,7 @@ extern "C" {
 /* actual or intended publication of such source code.   */
 
 /*#ident "@(#)kern-port:sys/ipc.h   10.2"*/
-#ident   "$Revision: 1.1 $"
+#ident   "$Revision: 1.1.1.1 $"
 /* Common IPC Access Structure */
 
 #include <sys/types.h>

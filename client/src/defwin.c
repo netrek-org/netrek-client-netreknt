@@ -10,8 +10,8 @@
  * the use of it.)
  * 
  * $Log: defwin.c,v $
- * Revision 1.1  1999/03/10 06:21:13  sheldon
- * Initial revision
+ * Revision 1.1.1.1  1999/03/10 06:21:13  sheldon
+ * Initial public release of Netrek:1999
  * */
 
 #include <stdio.h>
