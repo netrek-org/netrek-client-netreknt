@@ -207,7 +207,12 @@ void inform(W_Window ww, int x, int y, char key)
       k = &planets[target->o_num];
       dist = hypot((double) (me->p_x - k->pl_x),
                    (double) (me->p_y - k->pl_y));
-      if (k->pl_info & me->p_team)
+      if ((k->pl_info & me->p_team)
+
+#ifdef RECORDGAME
+    || playback
+#endif
+    )
         {
           (void) sprintf(buf, "%s (%c)", k->pl_name, teamlet[k->pl_owner]);
           W_WriteText(infow, W_Textwidth, W_Textheight * line++, planetColor(k), buf, strlen(buf),

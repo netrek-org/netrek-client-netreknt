@@ -39,6 +39,13 @@ intrupt()
   unsigned long t;
 
   udcounter++;
+  
+#ifdef RECORDGAME
+  if (playback)
+    needredraw |= readFromFile();
+  else
+#endif
+
   needredraw |=
 
 #ifdef BRMH

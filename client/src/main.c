@@ -22,6 +22,7 @@ void main2(int argc, char *argv[])
 {
   int     usage = 0;
   int     err = 0;
+  int     inplayback = 0;
   char   *name, *ptr;
   int 	  i;
 
@@ -89,6 +90,10 @@ void main2(int argc, char *argv[])
               else
                 usage++;
               break;
+#ifdef RECORDGAME
+            case 'F':
+              inplayback = 1;
+              /* No break */
             case 'f':
               if (i < argc) {
                 recordFileName = argv[i+1];
@@ -97,6 +102,7 @@ void main2(int argc, char *argv[])
               else
                 usage++;
               break;
+#endif
             case 'l':
               if (i < argc) {
                 logFileName = argv[i+1];
@@ -300,7 +306,13 @@ void main2(int argc, char *argv[])
     }
 #endif
 
-  err = cowmain(servertmp, xtrekPort, name);
+#ifdef RECORDGAME
+  if (inplayback)
+    err = pbmain(name);
+  else
+#endif
+
+    err = cowmain(servertmp, xtrekPort, name);
 
   exit(err);
 }

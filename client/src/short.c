@@ -1122,10 +1122,13 @@ void    handleVPlanet(unsigned char *sbuf)
 #endif /* ATM */
 
       plan->pl_armies = (unsigned char) packet->armies;
+
+#ifndef RECORDGAME
       if (plan->pl_info == 0)
         {
           plan->pl_owner = NOBODY;
         }
+#endif
 
 #ifdef ATM
       if (redraw)

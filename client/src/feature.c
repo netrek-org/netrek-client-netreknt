@@ -75,6 +75,10 @@ struct feature features[] =
   {"DEAD_WARP", &F_dead_warp, 'S', 1, 0, 0},
 #endif
 
+#ifdef RECORDGAME
+  {"MANY_SELF", &F_many_self, 'S', 0, 0, 0},
+#endif
+
   {0, 0, 0, 0, 0, 0}
 };
 

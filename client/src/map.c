@@ -215,7 +215,12 @@ planetmBitmap(register struct planet * p)
 {
   int     i;
 
-  if (p->pl_info & me->p_team)
+  if ((p->pl_info & me->p_team)
+  
+#ifdef RECORDGAME
+      || playback
+#endif
+    )
     {
       i = 0;
       if (p->pl_armies > 4)
@@ -299,7 +304,13 @@ static void DrawPlanets()
       W_WriteText(mapw, dx - (BMP_MPLANET_WIDTH / 2), dy + (BMP_MPLANET_HEIGHT / 2),
                   planetColor(l), l->pl_name, 3, planetFont(l));
 
-      if (showIND && (l->pl_info & me->p_team) && (l->pl_owner == NOBODY))
+      if (showIND && ((l->pl_info & me->p_team)
+      
+#ifdef RECORDGAME
+        || playback
+#endif
+
+       ) && (l->pl_owner == NOBODY))
         {
           W_MakeLine(mapw, dx + (BMP_MPLANET_WIDTH / 2 - 1),
                      dy + (BMP_MPLANET_HEIGHT / 2 - 1),
@@ -313,7 +324,12 @@ static void DrawPlanets()
 
       if (showPlanetOwner)
         {
-          ch = (l->pl_info & me->p_team) ? tolower(teamlet[l->pl_owner]) : '?';
+          ch = ((l->pl_info & me->p_team)
+          
+#ifdef RECORDGAME
+        || playback
+#endif          
+          ) ? tolower(teamlet[l->pl_owner]) : '?';
           W_WriteText(mapw, dx + (BMP_MPLANET_WIDTH / 2) + 2, dy - 4,
                       planetColor(l), &ch, 1, planetFont(l));
         }

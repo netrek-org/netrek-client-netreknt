@@ -139,8 +139,13 @@ int     phaserShowStats = 0;         /* How to show phaser stats */
 int     phaserStatTry   = 0;         /* Try/attemps to phaser */
 int     phaserStatHit   = 0;         /* Number of hits */
 #endif
+
+#ifdef RECORDGAME
 FILE   *recordFile = NULL;			 /* recorder: slurp packets
 						  * here */
+int    playback = 0;
+#endif
+
 FILE   *logFile = NULL;				 /* log messages to this file */
 int     scanplayer = 0;				 /* who to scan */
 int     showTractor = 1;			 /* show visible tractor
@@ -542,7 +547,10 @@ int     F_self_8flags = 1;
 int     F_self_8flags2 = 0;
 int     F_ship_cap = 0;
 
+#ifdef RECORDGAME
+int     F_many_self = 0;
+#endif
+
 #ifdef WARP_DEAD
 int     F_dead_warp = 0;
-
 #endif

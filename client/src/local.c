@@ -60,7 +60,12 @@ planetBitmap(register struct planet *p)
 {
   int     i;
 
- if (p->pl_info & me->p_team)
+ if ((p->pl_info & me->p_team)
+ 
+#ifdef RECORDGAME
+    || playback
+#endif
+    )
     {
           i = 0;
           if (p->pl_armies > 4)
@@ -101,7 +106,12 @@ static void DrawPlanets(void)
       W_WriteBitmap(dx - (BMP_PLANET_WIDTH / 2), dy - (BMP_PLANET_HEIGHT / 2),
                     planetBitmap(l), planetColor(l));
         
-      if (showIND && (l->pl_info & me->p_team) && (l->pl_owner == NOBODY))
+      if (showIND && ((l->pl_info & me->p_team)
+#ifdef RECORDGAME
+          || playback
+#endif
+      
+      ) && (l->pl_owner == NOBODY))
         {
           W_CacheLine(w, dx - (BMP_PLANET_WIDTH / 2), dy - (BMP_PLANET_HEIGHT / 2),
                   dx + (BMP_PLANET_WIDTH / 2 - 1), dy + (BMP_PLANET_HEIGHT / 2 - 1),
@@ -215,7 +225,11 @@ static void DrawShips(void)
 
       if (j->p_flags & PFCLOAK && (j->p_cloakphase == (CLOAK_PHASES - 1)))
         {
-          if (myPlayer(j))
+          if (myPlayer(j)
+#ifdef RECORDGAME
+          || playback
+#endif          
+          )
             {
               W_WriteBitmap(dx - (cloak_width / 2), dy - (cloak_height / 2),
                             cloakicon, myColor);
@@ -361,6 +375,7 @@ static void DrawShips(void)
             int     color = playerColor(j);
 
             idbuf[0] = *(shipnos + j->p_no);
+            buflen = 1;
 
             if (j == me)
               {

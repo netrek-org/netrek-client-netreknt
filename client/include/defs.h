@@ -181,8 +181,15 @@
  * the color of the ship.  Color 0 is white (same as 'myColor' used to be). */
 #define playerColor(p)		\
 	(myPlayer(p) ? myColor : shipCol[remap[(p)->p_team]])
+
+#ifdef RECORDGAME
+#define planetColor(p)    \
+  ((((p)->pl_info & me->p_team) || playback) \
+   ? shipCol[remap[(p)->pl_owner]] : unColor)
+#else
 #define planetColor(p)		\
 	(((p)->pl_info & me->p_team) ? shipCol[remap[(p)->pl_owner]] : unColor)
+#endif
 
 #define planetFont(p)           \
         (myPlanet(p) ? W_BoldFont : friendlyPlanet(p) ? W_UnderlineFont \

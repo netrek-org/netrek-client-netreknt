@@ -10,8 +10,11 @@
  * the use of it.)
  * 
  * $Log: defwin.c,v $
- * Revision 1.1  1999/03/10 06:21:13  sheldon
- * Initial revision
+ * Revision 1.2  1999/06/13 05:51:49  sheldon
+ * Added code for Cambot playback
+ *
+ * Revision 1.1.1.1  1999/03/10 06:21:13  sheldon
+ * Initial public release of Netrek:1999
  * */
 
 #include <stdio.h>
@@ -38,11 +41,6 @@
 #define VAL_WIDTH	8
 #define INDENT		3
 #define MAX_VLINES	42
-
-#ifdef RECORD
-extern char *recordFileName;
-
-#endif
 
 #define DEFMESSAGES	(sizeof(def_messages)/ sizeof(struct def))
 

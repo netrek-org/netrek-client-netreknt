@@ -69,7 +69,13 @@ extern int rdelay;
 extern int namemode;
 extern int warnShields;
 extern int showStats;
+#ifdef RECORDGAME
 extern FILE *recordFile;                         /* recorder */
+extern int playback;
+#define PL_PAUSE 1
+#define PL_FORWARD 2
+#define PL_REVERSE 3
+#endif
 extern FILE *logFile;                            /* message log */
 extern int msgBeep;                              /* ATM - msg beep */
 extern int warncount;
@@ -124,6 +130,10 @@ extern int updatespeed;
 extern int SBhours;
 
 extern int showMySpeed;
+
+#ifdef JUBILEE_PHASERS
+extern int jubilee_phasers;
+#endif
 
 #ifdef SHORT_PACKETS
 extern int why_dead;
@@ -420,9 +430,12 @@ extern int F_self_8flags;
 extern int F_self_8flags2;
 extern int F_ship_cap;
 
+#ifdef RECORDGAME
+extern int F_many_self;
+#endif
+
 #ifdef WARP_DEAD
 extern int F_dead_warp;
-
 #endif
 
 #endif /* _h_data */

@@ -1071,15 +1071,15 @@ doRead(int asock)
               if (debug)
                 printf("read packet %d\n", *bufptr);
 
-#ifdef RECORD
-              if (recordGame && recordFile != NULL && RECORDPACKET(*bufptr))
-                if ((fwrite(bufptr, size, 1, recordFile) != 1) ||
-                    (putc(*bufptr, recordFile) == EOF))
+#ifdef RECORDGAME
+              if (recordFile != NULL && ckRecordPacket(*bufptr)) {
+                if (fwrite(bufptr, size, 1, recordFile) != 1)
                   {
                     perror("write: (recordFile)");
                     fclose(recordFile);
                     recordFile = NULL;
                   }
+              }
 #endif
 
 #ifdef PACKET_LOG
@@ -1564,10 +1564,13 @@ void    handlePlanet(struct planet_spacket *packet)
         redraw = 1;
     }
   plan->pl_armies = ntohl(packet->armies);
+
+#ifndef RECORDGAME
   if (plan->pl_info == 0)
     {
       plan->pl_owner = NOBODY;
     }
+#endif
   if (redraw)
     {
       plan->pl_flags |= PLREDRAW;

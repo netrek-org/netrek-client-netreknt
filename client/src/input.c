@@ -1132,6 +1132,64 @@ void keyaction(W_Event * data)
       return;
     }
 
+#ifdef RECORDGAME
+  /* If playing a recorded game, do not use regular keys. */
+  /* What follows is a hardcoded list of commands */
+  if (playback)
+    {
+      struct obtype *target;
+
+      switch (key)
+  {
+  case 'Q':
+  case 'q':
+    /* Instant Quit */
+    terminate(0);
+    break;
+  case '0':
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+  case '!':
+  case '#':
+  case '%':
+  case '(':
+  case ')':
+  case '<':
+  case '>':
+  case '@':
+  case 'R':
+    pbsetspeed(key);
+    return;
+    break;
+  case 'l':
+    target = gettarget(data->Window, data->x, data->y, TARG_PLAYER);
+    pblockplayer(target->o_num);
+    return;
+    break;
+  case ';':
+    target = gettarget(data->Window, data->x, data->y, TARG_PLANET);
+    pblockplanet(target->o_num);
+    return;
+    break;
+  case 'I':
+  case 'i':
+  case '?':
+    /* Do the normal function */
+    /* Used for commands that do not try to send packets */
+    break;
+  default:
+    /* If key is not in above list dont run it. */
+    return;
+  }
+    }
+#endif
 
   /* suggestion:  later we can add an option removing this to the emptyKey()
    * function.  This would improve input efficiency considerably when
@@ -1211,6 +1269,13 @@ void buttonaction(W_Event * data)
 
   fastQuit = 0;                                  /* any event, cancel
                                                   * fastquit! */
+
+#ifdef RECORDGAME
+  /* While playing back recorded games, ignore the mouse */
+  if (playback)
+    return;
+#endif
+
 
 #ifdef SHORT_PACKETS
   if (data->Window == reviewWin)
