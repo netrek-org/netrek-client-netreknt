@@ -139,6 +139,7 @@ static void DrawShips(void)
   
   char idbuf[10];
   int buflen = 1;
+  static W_Color ph_col;
   const int view = SCALE * WINSIDE / 2;
   int dx, dy, px, py, wx, wy, tx, ty, lx, ly;
   
@@ -529,7 +530,45 @@ static void DrawShips(void)
                 
           if (friendlyPlayer(j))
             {
+#ifdef JUBILEE_PHASERS
+        if (j == me && php->ph_status == PHHIT && jubilee_phasers)
+    {
+      int col;
 
+      switch (ph_col)
+        {
+        case 0:
+          col = W_Red;
+          break;
+        case 1:
+          col = W_Green;
+          break;
+        case 2:
+          col = W_Yellow;
+          break;
+        case 3:
+          col = W_Cyan;
+          break;
+        default:
+          col = shipCol[remap[j->p_team]];
+          ph_col = 0;
+        }
+
+      ph_col++;
+
+      W_CacheLine(w, px, py, tx, ty, col);
+    }
+      else
+    {                                                                                                    
+/* I prefer them to just be solid white, I think most others will too
+   So I take this line out and replace it */
+/*    if ((php->ph_fuse % 2) == 1)    */
+      if (php->ph_status != PHMISS)
+        W_CacheLine (w, px, py, tx, ty, foreColor);
+      else
+        W_CacheLine (w, px, py, tx, ty, shipCol[remap[j->p_team]]);
+    }
+#else
 	      if (highlightFriendlyPhasers && (php->ph_status == PHHIT))
                 W_CacheLine(w, px, py, tx, ty, foreColor);
               else
@@ -539,6 +578,7 @@ static void DrawShips(void)
 		else
 		  W_CacheLine(w, px, py, tx, ty, shipCol[remap[j->p_team]]);
 	      }
+#endif
               php->ph_fuse++;
 
               clearline[0][clearlcount] = px;

@@ -645,7 +645,15 @@ highlightFriendlyPhasers = booleanDefault("highlightFriendlyPhasers",
   ignoreCaps = booleanDefault("ignoreCaps", ignoreCaps);
 
   showMySpeed = booleanDefault("showMySpeed", showMySpeed);
-  
+
+#ifdef JUBILEE_PHASERS
+  jubilee_phasers = booleanDefault("colorfulPhasers", jubilee_phasers);
+  printf("jubilee %d\n", jubilee_phasers);
+#else
+  printf("no jubilee :(\n");
+#endif
+
+
 #ifdef SOUND
   sound_init = booleanDefault("sound", sound_init);
 #endif
