@@ -332,7 +332,6 @@ void W_Initialize(char *display)
    wc.lpszClassName = ClassName;
 
    RegisterClass(&wc);
-
    if ((hCursorLibrary = LoadLibrary("CURSLIB.DLL")) == NULL)
      {
    fprintf(stderr, "Could not open curslib.dll\n");
@@ -340,15 +339,17 @@ void W_Initialize(char *display)
      }
 
    //Load our cursors - the ones we use from a resource file, anyway
-   TrekCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_TREK), IMAGE_CURSOR, 0, 0, 0);
-   WarnCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_WARN), IMAGE_CURSOR, 0, 0, 0);
-   LocalCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_LOCAL), IMAGE_CURSOR, 0, 0, 0);
-   MapCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_MAP), IMAGE_CURSOR, 0, 0, 0);
-   FedCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_FED), IMAGE_CURSOR, 0, 0, 0);
-   KliCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_KLI), IMAGE_CURSOR, 0, 0, 0);
-   OriCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_ORI), IMAGE_CURSOR, 0, 0, 0);
-   RomCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_ROM), IMAGE_CURSOR, 0, 0, 0);
-   
+   TrekCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_TREK), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   WarnCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_WARN), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   LocalCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_LOCAL), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   MapCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_MAP), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   FedCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_FED), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   KliCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_KLI), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   OriCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_ORI), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+   RomCursor = LoadImage(hCursorLibrary, MAKEINTRESOURCE(CUR_ROM), IMAGE_CURSOR, 32, 32, LR_MONOCHROME);
+
+if (RomCursor == NULL) printf("Whhops, there it is!\n");
+
    FreeLibrary(hCursorLibrary);
 
    //Create the fonts that we need. The fonts are actually in our resource file
@@ -2927,14 +2928,6 @@ void W_DefineMapcursor(W_Window window)
 
    win->cursor = MapCursor;
 
-/* SRS   W_DefineCursor(window,
-                  mapcursor_width,
-                  mapcursor_height,
-                  mapmask_bits,
-                  NULL,
-                  mapcursor_x_hot,
-                  mapcursor_y_hot);
-*/
    }
 
 void W_DefineLocalcursor(W_Window window)
@@ -2949,14 +2942,6 @@ void W_DefineLocalcursor(W_Window window)
 
    win->cursor = LocalCursor;
 
-/* SRS   W_DefineCursor(window,
-                  localcursor_width,
-                  localcursor_height,
-                  localmask_bits,
-                  NULL,
-                  localcursor_x_hot,
-                  localcursor_y_hot);
-*/
    }
 
 #define MakeTeamCursor(upper, team) \
@@ -3035,43 +3020,6 @@ void W_DefineTextCursor(W_Window window)
    }
 
 
-//Sets the cursor for a window, from an arbitrary set of bits
-void W_DefineCursor(W_Window window,int width,int height,
-               char *bits,char *mask,int xhot,int yhot)
-   {
-   int i;
-   unsigned char *bits2, *mask2;
-   FNHEADER_VOID;
-
-   //NB: we throw away the passed bitmap and create our own,
-   //since the X bitmap passed is blank, since it uses the masks
-   //to display.
-   bits2 = X11toCursor(bits, width, height);
-   mask2 = (unsigned char *) malloc(32 * 32/8);
-
-   if (!bits2 || !mask2)
-      {
-      fprintf(stderr, "Memory allocation failed while setting a cursor");
-      return;
-      }
-
-   //Create the mask as the inverse of the bitmap
-   for (i=0; i<32*32/8; i++)
-      mask2[i] = ~bits2[i];
-
-   //Check to see if we are using a created (i.e., must be deleted) cursor already,
-   //and also set this flag for future reference
-   if (win->UsingCreatedCursor)
-      DestroyCursor( win->cursor );
-   else
-      win->UsingCreatedCursor = TRUE;
-
-   win->cursor =
-      CreateCursor(MyInstance, xhot, yhot, 32, 32, (void *)mask2, (void *)bits2);
-
-   free(mask2);
-   free(bits2);
-   }
 
 
 /***************************************************************************/

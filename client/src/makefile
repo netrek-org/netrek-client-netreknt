@@ -153,7 +153,7 @@ netrek.mif: Makefile
 netrek.exe:  $(OBJS) $(RESOURCES) warn.cur trek.cur main.ico netrek.mif
 		$(link) @netrek.mif
 		stampver -vstampver.inf -i4 -j4 netrek.exe
-		copy netrek.exe ..\dist
+		copy netrek.exe ..\..\..\dist
 
 clean:
 	del *.obj
